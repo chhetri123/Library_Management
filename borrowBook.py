@@ -66,7 +66,7 @@ def borrowBook():
                         with open(f"Borrowed by-{name}.txt","w") as f:
                             f.write("\n\t\tlibrary Book Management \n")
                             f.write("\n\tBorrowed By "+name+"\n")
-                            f.write(f"\t Date:{getDate()} \t\t Time:{getTime()}\n\n")
+                            f.write(f"\t Date:{getDate()}\n\t\t Time:{getTime()}\n\n")
                             f.write(" Bookname \t\t\t\t\t\t AuthorName\n")
                             f.write(str(selectBook(bookSelect)))
                     else:

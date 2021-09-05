@@ -1,9 +1,9 @@
 import bookList
-import os
-from dateAndTime import getDate,getTime
+from dateAndTime import getDate,getTime,getRemainingDate
 from os import system
 import time
 from bookList import manageBookList
+global bookBorrowedDate
 def returnBook():
     while True:
         print("----Returning the book ----\n\n")
@@ -24,7 +24,9 @@ def returnBook():
             break        
         print("please enter full name\n")
     try:
-        
+        with open(f"Borrowed by-{name}.txt","r") as f:
+             date=f.readlines()[4]
+             bookBorrowedDate=date.strip().replace("Date:","").split("-")
         with open(f"Borrowed by-{name}.txt","r") as f:
             books=f.read()
             price=0.0
@@ -34,10 +36,6 @@ def returnBook():
             system("clear")        
             print(books)
             print(f"\t\t\t\t\t    ${price}")
-
-
-           
-        
     except: 
         system("clear")
         print("Borrowed name is incorrect.Please try again")
@@ -55,14 +53,13 @@ def returnBook():
                 manageBookList(i,bookList.numberOfBookAvailable[i]+1)
 
 
-
-        print("Is the book return date expired?")
-        stat=input("Press Y for Yes and N for No :")
-        if(stat.upper()=="Y"):
-            day=int(input("By how many days was the book returned late?\n"))
-            fine=2*day
+        remainingDate=getRemainingDate(bookBorrowedDate)
+        if remainingDate < 0 :
+            fine=2*abs(remainingDate)
+            f.write(f"\t\t\t\t\t\t\t\t\t\t\t\t\tLate days :{str(abs(remainingDate))}\n")
             f.write(f"\t\t\t\t\t\t\t\t\t\t\t\t\tFine: $ {str(fine)}\n")
             price=price+fine
+        f.write(f"\n\t\t\t\t\t\t\t\tDay remaining to return book : {remainingDate} days")    
         print(f"Final Total: ${str(price)}\n")
         f.write(f"\t\t\t\t\t\t\t\t\t\t\t\t\tTotal: $ {str(price)}\n")
         time.sleep(4)
